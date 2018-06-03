@@ -1,2 +1,2 @@
 # AsciiVideo
-Placeholder for now.
+Square font courtesy of Wouter van Oortmerssen: http://strlen.com/square/
