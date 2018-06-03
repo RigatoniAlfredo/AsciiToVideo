@@ -92,7 +92,11 @@ parser.add_option("-f", "--font-size", dest="fontsize")
 video = cv2.VideoCapture(options.filename)
 count = 1
 success = True
-os.chdir(os.path.abspath(os.path.join(os.getcwd(), "frames")))
+try:
+    os.chdir(os.path.abspath(os.path.join(os.getcwd(), "frames")))
+except:
+    os.mkdir("frames")
+    os.chdir(os.path.abspath(os.path.join(os.getcwd(), "frames")))
 while success:
     success, image = video.read()
     cv2.imwrite("frame%d.jpg" % count, image)
