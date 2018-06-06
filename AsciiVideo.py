@@ -86,6 +86,7 @@ parser = OptionParser()
 parser.add_option("-i", "--input", dest="filename")
 parser.add_option("-s", "--size", dest="imageSize")
 parser.add_option("-f", "--font-size", dest="fontsize")
+parser.add_option("-a", "--audio", dest="audio")
 (options, args) = parser.parse_args()
 
 '''Opens input video and splits it up into its individual frames'''
@@ -121,7 +122,11 @@ outputVideo.release()
 video.release()
 cv2.destroyAllWindows()
 outputWEBM = os.path.abspath(os.path.join(os.getcwd(), os.pardir, "output.webm"))
-subprocess.call("ffmpeg -i output.mp4 -c:v libvpx-vp9 -crf 31 -b:v 0 -threads %d %s" % (cores, outputWEBM), shell=True)
+if(int(options.audio) == 1):
+    subprocess.call("ffmpeg -i %s -vn -acodec libvorbis -threads %d audio.ogg" % (options.filename, cores), shell=True)
+    subprocess.call("ffmpeg -i output.mp4 -i audio.ogg -c:v libvpx-vp9 -crf 31 -b:v 0 -threads %d %s" % (cores, outputWEBM), shell=True)
+else:
+    subprocess.call("ffmpeg -i output.mp4 -c:v libvpx-vp9 -crf 31 -b:v 0 -threads %d %s" % (cores, outputWEBM), shell=True)
 os.remove("output.mp4")
 for f in glob.glob("output*.jpg"):
     os.remove(f)
