@@ -6,7 +6,7 @@ Tested using FFmpeg version 3.2.10 (very specifically, this version: http://snap
 Before running for the first time, run `pip install -r requirements.txt` to install required third-party packages.
 
 
-##HOW TO USE
+## HOW TO USE
 
 Arguments:
 
