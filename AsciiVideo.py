@@ -66,12 +66,25 @@ def imgToAscii(filename):
     textWidth = squareFont.getsize(characters[0])[0]
     textHeight = squareFont.getsize(characters[0])[1]*len(characters)
     lineHeight = squareFont.getsize(characters[0])[1]
+    charWidth = squareFont.getsize("@")[0]
     asciiImage = Image.new("RGB", (textWidth, textHeight), (255, 255, 255))
     draw = ImageDraw.Draw(asciiImage)
     yCoord = 0
-    for y in range(len(characters)):
-        draw.text((0,yCoord), characters[y], font=squareFont, fill="#000000")
+    x = 0
+    y = 0
+    for line in characters:
+        if(int(options.color) == 1):
+            xCoord = 0
+            x = 0
+            for char in line:
+                color = imagePixels[x,y]
+                draw.text((xCoord,yCoord), char, font=squareFont, fill=color)
+                xCoord = xCoord + charWidth
+                x = x + 1
+        else:
+            draw.text((0,yCoord), line, font=squareFont, fill="#000000")
         yCoord = yCoord + lineHeight
+        y = y + 1
 
     '''Saves the final image at the user-specified size'''
     i = re.findall(r"\d+", filename)
@@ -86,6 +99,7 @@ parser = OptionParser()
 parser.add_option("-i", "--input", dest="filename")
 parser.add_option("-s", "--size", dest="imageSize")
 parser.add_option("-f", "--font-size", dest="fontsize")
+parser.add_option("-c", "--color", dest="color")
 parser.add_option("-a", "--audio", dest="audio")
 (options, args) = parser.parse_args()
 
