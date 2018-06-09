@@ -15,6 +15,8 @@ Arguments:
 
 *-f/--font-size*: Specifies the font size to be used for the ASCII characters.
 
-*-a/--audio*: Determines whether or not to include audio in the final video. If set to `1`, includes audio. If set to any other number, does not include audio.
+*-c/--color*: Determines whether or not to output the final video in color. If set to `1`, includes audio. If set to any other number, does not include audio.
+
+*-a/--audio*: Determines whether or not to include audio in the final video. Works the same was as the `color` argument.
 
 I find that a size of 1280 and a font size of 12 works well.
