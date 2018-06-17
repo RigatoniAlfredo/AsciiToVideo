@@ -21,4 +21,4 @@ Optional Arguments:
 
 *-a/--audio*: If passed, include audio in the final video.
 
-*--vp9*: If passed, output WEBM using the VP9. Otherwise, outputs in VP8.
+*--vp9*: If passed, output WEBM using the VP9 codec. Otherwise, outputs in VP8.
