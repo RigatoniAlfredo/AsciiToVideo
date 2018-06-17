@@ -75,7 +75,7 @@ def imgToAscii(filename):
     x = 0
     y = 0
     for line in characters:
-        if(int(options.color) == 1):
+        if(options.color):
             xCoord = 0
             x = 0
             for char in line:
@@ -101,9 +101,18 @@ parser = OptionParser()
 parser.add_option("-i", "--input", dest="filename")
 parser.add_option("-s", "--size", dest="imageSize")
 parser.add_option("-f", "--font-size", dest="fontsize")
-parser.add_option("-c", "--color", dest="color")
-parser.add_option("-a", "--audio", dest="audio")
+parser.add_option("-c", "--color", action="store_true", dest="color")
+parser.add_option("-a", "--audio", action="store_true", dest="audio")
+parser.add_option("--vp9", action="store_true", dest="vp9")
 (options, args) = parser.parse_args()
+
+if options.imageSize is None:
+    options.imageSize = 1280
+if options.fontsize is None:
+    options.fontsize = 12
+codec = "libvpx"
+if options.vp9:
+    codec = "libvpx-vp9"
 
 '''Opens input video and splits it up into its individual frames'''
 video = cv2.VideoCapture(options.filename)
@@ -138,11 +147,11 @@ outputVideo.release()
 video.release()
 cv2.destroyAllWindows()
 outputWEBM = os.path.abspath(os.path.join(os.getcwd(), os.pardir, "output.webm"))
-if(int(options.audio) == 1):
+if(options.audio):
     subprocess.call("ffmpeg -i %s -vn -acodec libvorbis -threads %d audio.ogg" % (options.filename, cores), shell=True)
-    subprocess.call("ffmpeg -i output.mp4 -i audio.ogg -c:v libvpx-vp9 -crf 31 -b:v 0 -threads %d %s" % (cores, outputWEBM), shell=True)
+    subprocess.call("ffmpeg -i output.mp4 -i audio.ogg -c:v %s -crf 31 -b:v 0 -threads %d %s" % (codec, cores, outputWEBM), shell=True)
 else:
-    subprocess.call("ffmpeg -i output.mp4 -c:v libvpx-vp9 -crf 31 -b:v 0 -threads %d %s" % (cores, outputWEBM), shell=True)
+    subprocess.call("ffmpeg -i output.mp4 -c:v %s -crf 31 -b:v 0 -threads %d %s" % (codec, cores, outputWEBM), shell=True)
 os.remove("output.mp4")
 for f in glob.glob("output*.jpg"):
     os.remove(f)

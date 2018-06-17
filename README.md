@@ -7,16 +7,18 @@ Before running for the first time, run `pip install -r requirements.txt` to inst
 
 ## HOW TO USE
 
-Arguments:
+Required Arguments:
 
 *-i/--input*: Specifies the video to be converted.
 
-*-s/--size*: Specifies the width (in pixels) of the final output video.
+Optional Arguments:
 
-*-f/--font-size*: Specifies the font size to be used for the ASCII characters.
+*-s/--size*: Specifies the width (in pixels) of the final output video. Defaults to 1280.
 
-*-c/--color*: Determines whether or not to output the final video in color. If set to `1`, includes audio. If set to any other number, does not include audio.
+*-f/--font-size*: Specifies the font size to be used for the ASCII characters. Defaults to 12.
 
-*-a/--audio*: Determines whether or not to include audio in the final video. Works the same was as the `color` argument.
+*-c/--color*: If passed, output the final video in color.
 
-I find that a size of 1280 and a font size of 12 works well.
+*-a/--audio*: If passed, include audio in the final video.
+
+*--vp9*: If passed, output WEBM using the VP9. Otherwise, outputs in VP8.
