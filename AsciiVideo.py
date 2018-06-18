@@ -10,6 +10,9 @@ from optparse import OptionParser
 from PIL import Image, ImageFont, ImageDraw
 from multiprocessing import cpu_count
 from concurrent.futures import ProcessPoolExecutor
+from datetime import datetime
+
+startTime = datetime.now()
 
 '''Number of cores to use for multi-core processes (half of what your CPU has)'''
 cores = int(cpu_count() / 2)
@@ -94,7 +97,9 @@ def imgToAscii(filename):
     asciiImage.thumbnail((int(options.imageSize), int(options.imageSize)))
     asciiImage.save("output%d.jpg" % (i + 1), "JPEG")
     os.remove(filename)
-    print("Frame %d created" % (i + 1))
+    #print("Frame %d created" % (i + 1))
+    counter = len(glob.glob("output*.jpg"))
+    print("\rFrame creation %d%% complete" % int(counter / imgToAscii.total * 100), end="")
 
 '''Sets up an option parser, adds options, and parses them'''
 parser = OptionParser()
@@ -131,6 +136,7 @@ os.remove("frame%d.jpg" % (count - 1))
 
 '''Runs the imgToAscii function on each frame of the input video, uses half of CPU's available cores'''
 filenames = os.listdir()
+imgToAscii.total = len(os.listdir())
 with ProcessPoolExecutor(cores) as pool:
     pool.map(imgToAscii, filenames)
 
@@ -155,3 +161,8 @@ else:
 os.remove("output.mp4")
 for f in glob.glob("output*.jpg"):
     os.remove(f)
+
+endTime = datetime.now()
+timeElapsed = endTime - startTime
+finalTime = str(timeElapsed)[:-6] + str(round(timeElapsed.microseconds,-4))[0:2]
+print("\nComplete! Time elapsed: %s" % finalTime)
