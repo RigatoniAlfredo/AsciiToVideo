@@ -31,6 +31,7 @@ from multiprocessing import cpu_count
 from concurrent.futures import ProcessPoolExecutor
 from datetime import datetime
 
+'''Starts the timer which records how long the conversion process takes'''
 startTime = datetime.now()
 
 '''Number of cores to use for multi-core processes (half of what your CPU has)'''
@@ -175,12 +176,14 @@ outputWEBM = os.path.abspath(os.path.join(os.getcwd(), os.pardir, "output.webm")
 if(options.audio):
     subprocess.call("ffmpeg -i %s -vn -acodec libvorbis -threads %d audio.ogg" % (options.filename, cores), shell=True)
     subprocess.call("ffmpeg -i output.mp4 -i audio.ogg -c:v %s -crf 31 -b:v 0 -threads %d %s" % (codec, cores, outputWEBM), shell=True)
+    os.remove("audio.ogg")
 else:
     subprocess.call("ffmpeg -i output.mp4 -c:v %s -crf 31 -b:v 0 -threads %d %s" % (codec, cores, outputWEBM), shell=True)
 os.remove("output.mp4")
 for f in glob.glob("output*.jpg"):
     os.remove(f)
 
+'''Ends the timer and prints the time taken to convert the video, rounded to two decimal places'''
 endTime = datetime.now()
 timeElapsed = endTime - startTime
 finalTime = str(timeElapsed)[:-6] + str(round(timeElapsed.microseconds,-4))[0:2]
