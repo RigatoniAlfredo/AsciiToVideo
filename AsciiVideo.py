@@ -19,12 +19,7 @@ You should have received a copy of the GNU General Public License
 along with AsciiVideo. If not, see <http://www.gnu.org/licenses/>.
 '''
 
-import sys
-import cv2
-import os
-import glob
-import subprocess
-import re
+import sys, cv2, os, glob, subprocess, re
 from optparse import OptionParser
 from PIL import Image, ImageFont, ImageDraw
 from multiprocessing import cpu_count
@@ -98,7 +93,7 @@ def imgToAscii(filename):
     x = 0
     y = 0
     for line in characters:
-        if(options.color):
+        if options.color:
             xCoord = 0
             x = 0
             for char in line:
@@ -173,7 +168,7 @@ outputVideo.release()
 video.release()
 cv2.destroyAllWindows()
 outputWEBM = os.path.abspath(os.path.join(os.getcwd(), os.pardir, "output.webm"))
-if(options.audio):
+if options.audio:
     subprocess.call("ffmpeg -i %s -vn -acodec libvorbis -threads %d audio.ogg" % (options.filename, cores), shell=True)
     subprocess.call("ffmpeg -i output.mp4 -i audio.ogg -c:v %s -crf 31 -b:v 0 -threads %d %s" % (codec, cores, outputWEBM), shell=True)
     os.remove("audio.ogg")
